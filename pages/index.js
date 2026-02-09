@@ -4,26 +4,33 @@ import { useEffect, useState } from "react";
 export default function Home() {
   const [initData, setInitData] = useState(null);
   const [parsedData, setParsedData] = useState({});
+  const [rawData, setRawData] = useState('');
 
   useEffect(() => {
     // Check if we're in the browser
     if (typeof window !== 'undefined') {
-      // Get initData from URLSearchParams
+      // Get initData from URL hash (most reliable method for Telegram)
       const urlParams = new URLSearchParams(window.location.search);
-      const initDataParam = urlParams.get('tgWebAppData');
+      let initDataStr = urlParams.get('tgWebAppData');
       
-      if (initDataParam) {
-        setInitData(initDataParam);
+      // If not found in search params, try to get from window.Telegram
+      if (!initDataStr && window.Telegram?.WebApp?.initData) {
+        initDataStr = window.Telegram.WebApp.initData;
+      }
+      
+      if (initDataStr) {
+        setRawData(initDataStr);
         
-        // Parse the initData
-        const params = new URLSearchParams(initDataParam);
+        // Parse the initData properly
+        const params = new URLSearchParams(initDataStr);
         const data = {};
         for (const [key, value] of params) {
           data[key] = value;
         }
+        setInitData(initDataStr);
         setParsedData(data);
       } else {
-        // Fallback: try to get from Telegram Web Apps object if available
+        // Try to get from Telegram Web Apps object if available
         if (window.Telegram?.WebApp) {
           const tg = window.Telegram.WebApp;
           setParsedData({
@@ -35,8 +42,8 @@ export default function Home() {
             viewportStableHeight: tg.viewportStableHeight,
             headerColor: tg.headerColor,
             backgroundColor: tg.backgroundColor,
-            BackButton: tg.BackButton.isVisible,
-            MainButton: tg.MainButton.text,
+            BackButton: tg.BackButton?.isVisible,
+            MainButton: tg.MainButton?.text,
             HapticFeedback: !!tg.HapticFeedback,
             CloudStorage: !!tg.CloudStorage,
             BiometricManager: !!tg.BiometricManager,
@@ -67,6 +74,17 @@ export default function Home() {
         <main>
           <h1>Telegram Mini App</h1>
           
+          <div style={{ marginTop: '20px' }}>
+            <h2>Raw Init Data:</h2>
+            {rawData ? (
+              <pre style={{ backgroundColor: '#f0f0f0', padding: '10px', borderRadius: '4px', overflowX: 'auto' }}>
+                {rawData}
+              </pre>
+            ) : (
+              <p>No raw initData found in URL</p>
+            )}
+          </div>
+
           <div style={{ marginTop: '20px' }}>
             <h2>Received Init Data:</h2>
             {initData ? (
