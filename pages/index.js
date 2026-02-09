@@ -17,7 +17,6 @@ export default function Home() {
       debugLog.push(`Location: ${window.location.pathname}`);
       debugLog.push(`URL params: ${window.location.search.substring(0, 100)}`);
       
-      // Проверяем наличие Telegram WebApp
       const tg = window.Telegram?.WebApp;
       const hasTelegramObj = !!tg;
       
@@ -29,16 +28,12 @@ export default function Home() {
         debugLog.push(`Platform: ${tg.platform || 'N/A'}`);
         debugLog.push(`InitData present: ${tg.initData ? 'Yes' : 'No'}`);
         
-        // Инициализируем Telegram WebApp
         try {
           tg.ready();
           debugLog.push('✓ Telegram.WebApp.ready() called');
-          
-          // Разворачиваем на полный экран
           tg.expand();
           debugLog.push('✓ Telegram.WebApp.expand() called');
           
-          // Подключаемся к событиям
           tg.onEvent('viewportChanged', (e) => {
             debugLog.push(`Viewport changed: ${JSON.stringify(e)}`);
           });
@@ -47,7 +42,6 @@ export default function Home() {
           setError(`Telegram init error: ${e.message}`);
         }
         
-        // Пытаемся получить initData из Telegram объекта
         if (tg.initData) {
           debugLog.push('Getting initData from Telegram object');
           processInitData(tg.initData, debugLog, 'Telegram object');
@@ -56,7 +50,6 @@ export default function Home() {
         }
       }
       
-      // Также проверяем URL параметры (резервный вариант)
       const urlParams = new URLSearchParams(window.location.search);
       const initDataFromUrl = urlParams.get('tgWebAppData');
       
@@ -65,7 +58,6 @@ export default function Home() {
         processInitData(initDataFromUrl, debugLog, 'URL params');
       }
       
-      // Если никаких данных нет - режим разработки
       if (!initData && !parsedData.user) {
         setParsedData({
           'Status': 'Development Mode',
@@ -87,12 +79,10 @@ export default function Home() {
     setRawData(data);
     
     try {
-      // НЕ используем decodeURIComponent - URLSearchParams делает это автоматически
       const params = new URLSearchParams(data);
       const parsed = {};
       
       for (const [key, value] of params) {
-        // Пытаемся распарсить JSON значения
         if (key === 'user' || key === 'receiver' || key === 'chat') {
           try {
             parsed[key] = JSON.parse(value);
@@ -130,19 +120,37 @@ export default function Home() {
         fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
         maxWidth: '600px',
         margin: '0 auto',
-        backgroundColor: 'var(--tg-theme-bg-color, #ffffff)',
-        color: 'var(--tg-theme-text-color, #000000)',
+        backgroundColor: '#ffffff',
+        color: '#1a1a1a',
         minHeight: '100vh'
       }}>
         <main>
-          <h1 style={{ fontSize: '24px', marginBottom: '20px' }}>Telegram Mini App</h1>
+          <div style={{
+            textAlign: 'center',
+            padding: '30px 20px',
+            border: '2px solid #1a1a1a',
+            marginBottom: '30px',
+            backgroundColor: '#ffffff'
+          }}>
+            <h1 style={{ 
+              fontSize: '28px', 
+              margin: '0 0 10px 0',
+              fontWeight: 'bold',
+              letterSpacing: '2px'
+            }}>✓ WHITE DESIGN v2.0</h1>
+            <p style={{ 
+              margin: 0,
+              fontSize: '14px',
+              color: '#666'
+            }}>Updated: Clean White Theme</p>
+          </div>
           
           {isLoading && (
             <div style={{ 
               padding: '20px', 
-              backgroundColor: '#e3f2fd', 
-              borderRadius: '8px',
-              textAlign: 'center'
+              border: '1px solid #ddd',
+              textAlign: 'center',
+              marginBottom: '20px'
             }}>
               Loading...
             </div>
@@ -151,10 +159,9 @@ export default function Home() {
           {error && (
             <div style={{ 
               padding: '15px', 
-              backgroundColor: '#ffebee', 
-              borderRadius: '8px',
+              border: '1px solid #1a1a1a',
               marginBottom: '20px',
-              color: '#c62828'
+              color: '#1a1a1a'
             }}>
               <strong>Error:</strong> {error}
             </div>
@@ -162,17 +169,16 @@ export default function Home() {
           
           <div style={{ 
             marginTop: '20px', 
-            backgroundColor: isTelegramEnv ? '#e8f5e9' : '#fff3e0', 
-            padding: '15px', 
-            borderRadius: '8px',
+            border: '1px solid #ddd',
+            padding: '20px', 
             marginBottom: '20px'
           }}>
-            <h3 style={{ marginTop: 0 }}>Environment</h3>
-            <p style={{ margin: '5px 0' }}><strong>Telegram:</strong> {isTelegramEnv ? '✓ Connected' : '✗ Not detected'}</p>
+            <h3 style={{ marginTop: 0, borderBottom: '1px solid #ddd', paddingBottom: '10px' }}>Environment</h3>
+            <p style={{ margin: '10px 0' }}><strong>Telegram:</strong> {isTelegramEnv ? '✓ Connected' : '✗ Not detected'}</p>
             {isTelegramEnv && (
               <>
-                <p style={{ margin: '5px 0' }}><strong>Platform:</strong> {window.Telegram?.WebApp?.platform}</p>
-                <p style={{ margin: '5px 0' }}><strong>Version:</strong> {window.Telegram?.WebApp?.version}</p>
+                <p style={{ margin: '10px 0' }}><strong>Platform:</strong> {window.Telegram?.WebApp?.platform}</p>
+                <p style={{ margin: '10px 0' }}><strong>Version:</strong> {window.Telegram?.WebApp?.version}</p>
               </>
             )}
           </div>
@@ -180,33 +186,32 @@ export default function Home() {
           {parsedData.user && (
             <div style={{ 
               marginTop: '20px', 
-              backgroundColor: '#f3e5f5', 
-              padding: '15px', 
-              borderRadius: '8px',
+              border: '1px solid #ddd',
+              padding: '20px', 
               marginBottom: '20px'
             }}>
-              <h3 style={{ marginTop: 0 }}>User Info</h3>
-              <p style={{ margin: '5px 0' }}><strong>ID:</strong> {parsedData.user.id}</p>
-              <p style={{ margin: '5px 0' }}><strong>Name:</strong> {parsedData.user.first_name} {parsedData.user.last_name || ''}</p>
+              <h3 style={{ marginTop: 0, borderBottom: '1px solid #ddd', paddingBottom: '10px' }}>User Info</h3>
+              <p style={{ margin: '10px 0' }}><strong>ID:</strong> {parsedData.user.id}</p>
+              <p style={{ margin: '10px 0' }}><strong>Name:</strong> {parsedData.user.first_name} {parsedData.user.last_name || ''}</p>
               {parsedData.user.username && (
-                <p style={{ margin: '5px 0' }}><strong>Username:</strong> @{parsedData.user.username}</p>
+                <p style={{ margin: '10px 0' }}><strong>Username:</strong> @{parsedData.user.username}</p>
               )}
               {parsedData.user.language_code && (
-                <p style={{ margin: '5px 0' }}><strong>Language:</strong> {parsedData.user.language_code}</p>
+                <p style={{ margin: '10px 0' }}><strong>Language:</strong> {parsedData.user.language_code}</p>
               )}
             </div>
           )}
 
-          <div style={{ marginTop: '20px' }}>
-            <h3>Raw Init Data</h3>
+          <div style={{ marginTop: '20px', marginBottom: '20px' }}>
+            <h3 style={{ borderBottom: '1px solid #ddd', paddingBottom: '10px' }}>Raw Init Data</h3>
             {rawData ? (
               <pre style={{ 
-                backgroundColor: '#f5f5f5', 
-                padding: '10px', 
-                borderRadius: '8px', 
+                border: '1px solid #ddd',
+                padding: '15px', 
                 overflowX: 'auto',
                 fontSize: '12px',
-                wordBreak: 'break-all'
+                wordBreak: 'break-all',
+                backgroundColor: '#fafafa'
               }}>
                 {rawData}
               </pre>
@@ -215,24 +220,23 @@ export default function Home() {
             )}
           </div>
 
-          <div style={{ marginTop: '20px' }}>
-            <h3>Parsed Data</h3>
+          <div style={{ marginTop: '20px', marginBottom: '20px' }}>
+            <h3 style={{ borderBottom: '1px solid #ddd', paddingBottom: '10px' }}>Parsed Data</h3>
             {Object.keys(parsedData).length > 0 ? (
               <div style={{ 
-                backgroundColor: '#f5f5f5', 
-                padding: '15px', 
-                borderRadius: '8px'
+                border: '1px solid #ddd',
+                padding: '15px'
               }}>
                 {Object.entries(parsedData).map(([key, value]) => (
-                  <div key={key} style={{ marginBottom: '10px' }}>
+                  <div key={key} style={{ marginBottom: '15px' }}>
                     <strong>{key}:</strong>
                     <pre style={{ 
-                      margin: '5px 0 0 0',
+                      margin: '8px 0 0 0',
                       fontSize: '12px',
-                      backgroundColor: '#fff',
-                      padding: '8px',
-                      borderRadius: '4px',
-                      overflowX: 'auto'
+                      border: '1px solid #eee',
+                      padding: '10px',
+                      overflowX: 'auto',
+                      backgroundColor: '#fafafa'
                     }}>
                       {typeof value === 'object' ? JSON.stringify(value, null, 2) : String(value)}
                     </pre>
@@ -245,17 +249,16 @@ export default function Home() {
           </div>
 
           <div style={{ marginTop: '20px' }}>
-            <h3>Debug Log</h3>
+            <h3 style={{ borderBottom: '1px solid #ddd', paddingBottom: '10px' }}>Debug Log</h3>
             <div style={{ 
-              backgroundColor: '#212121', 
-              color: '#fff',
+              border: '1px solid #ddd',
               padding: '15px', 
-              borderRadius: '8px',
               fontSize: '12px',
-              fontFamily: 'monospace'
+              fontFamily: 'monospace',
+              backgroundColor: '#fafafa'
             }}>
               {debugInfo.map((info, index) => (
-                <div key={index} style={{ marginBottom: '4px' }}>
+                <div key={index} style={{ marginBottom: '6px', color: '#444' }}>
                   {info}
                 </div>
               ))}
