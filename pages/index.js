@@ -5,75 +5,110 @@ export default function Home() {
   const [initData, setInitData] = useState(null);
   const [parsedData, setParsedData] = useState({});
   const [rawData, setRawData] = useState('');
+  const [debugInfo, setDebugInfo] = useState([]);
+  const [isTelegramEnv, setIsTelegramEnv] = useState(false);
 
   useEffect(() => {
+    const debugLog = [];
+    
     // Check if we're in the browser
     if (typeof window !== 'undefined') {
-      // Get initData from URL hash (most reliable method for Telegram)
+      debugLog.push(`Window object available: ${!!window}`);
+      debugLog.push(`Location href: ${window.location.href}`);
+      debugLog.push(`URL search params: ${window.location.search}`);
+      
+      // Check for Telegram Web App object
+      const hasTelegramObj = !!(window.Telegram && window.Telegram.WebApp);
+      setIsTelegramEnv(hasTelegramObj);
+      debugLog.push(`Is Telegram environment: ${hasTelegramObj}`);
+      
+      if (hasTelegramObj) {
+        debugLog.push(`Telegram WebApp version: ${window.Telegram.WebApp.version}`);
+        debugLog.push(`Telegram WebApp platform: ${window.Telegram.WebApp.platform}`);
+        debugLog.push(`Telegram WebApp initData: ${window.Telegram.WebApp.initData || 'Not available'}`);
+      }
+      
+      // Get initData from URL
       const urlParams = new URLSearchParams(window.location.search);
-      let initDataStr = urlParams.get('tgWebAppData');
+      const initDataFromUrl = urlParams.get('tgWebAppData');
       
-      // If not found in search params, try to get from window.Telegram
-      if (!initDataStr && window.Telegram?.WebApp?.initData) {
-        initDataStr = window.Telegram.WebApp.initData;
-      }
+      debugLog.push(`Init data from URL params: ${initDataFromUrl ? 'Found' : 'Not found'}`);
       
-      if (initDataStr) {
-        setRawData(initDataStr);
+      if (initDataFromUrl) {
+        setRawData(initDataFromUrl);
         
-        // Parse the initData properly
-        const params = new URLSearchParams(initDataStr);
-        const data = {};
-        for (const [key, value] of params) {
-          data[key] = value;
+        // Parse initData as URL-encoded string
+        try {
+          // Decode URL-encoded string
+          const decodedData = decodeURIComponent(initDataFromUrl);
+          const params = new URLSearchParams(decodedData);
+          const data = {};
+          
+          for (const [key, value] of params) {
+            data[key] = value;
+          }
+          
+          setInitData(initDataFromUrl);
+          setParsedData(data);
+          debugLog.push(`Successfully parsed ${Object.keys(data).length} parameters`);
+        } catch (error) {
+          debugLog.push(`Error parsing initData: ${error.message}`);
         }
-        setInitData(initDataStr);
-        setParsedData(data);
+      } else if (hasTelegramObj && window.Telegram.WebApp.initData) {
+        // Fallback to Telegram WebApp object
+        const initDataFromObj = window.Telegram.WebApp.initData;
+        setRawData(initDataFromObj);
+        
+        try {
+          // Parse initData from Telegram object
+          const params = new URLSearchParams(initDataFromObj);
+          const data = {};
+          
+          for (const [key, value] of params) {
+            data[key] = value;
+          }
+          
+          setInitData(initDataFromObj);
+          setParsedData(data);
+          debugLog.push(`Successfully parsed ${Object.keys(data).length} parameters from Telegram object`);
+        } catch (error) {
+          debugLog.push(`Error parsing initData from Telegram object: ${error.message}`);
+        }
       } else {
-        // Try to get from Telegram Web Apps object if available
-        if (window.Telegram?.WebApp) {
-          const tg = window.Telegram.WebApp;
-          setParsedData({
-            version: tg.version,
-            platform: tg.platform,
-            colorScheme: tg.colorScheme,
-            isExpanded: tg.isExpanded,
-            viewportHeight: tg.viewportHeight,
-            viewportStableHeight: tg.viewportStableHeight,
-            headerColor: tg.headerColor,
-            backgroundColor: tg.backgroundColor,
-            BackButton: tg.BackButton?.isVisible,
-            MainButton: tg.MainButton?.text,
-            HapticFeedback: !!tg.HapticFeedback,
-            CloudStorage: !!tg.CloudStorage,
-            BiometricManager: !!tg.BiometricManager,
-            QRScanner: !!tg.QRScanner,
-            themeParams: JSON.stringify(tg.themeParams),
-          });
-        } else {
-          // For testing purposes, simulate some data
-          setParsedData({
-            'For Testing': 'This is simulated data. Actual data will come from Telegram.',
-            'Platform': 'web',
-            'Version': '6.0'
-          });
-        }
+        // For testing purposes, simulate some data
+        setParsedData({
+          'Status': 'Running outside Telegram environment',
+          'Platform': typeof window !== 'undefined' && window.Telegram?.WebApp?.platform || 'web',
+          'Version': typeof window !== 'undefined' && window.Telegram?.WebApp?.version || 'N/A',
+          'URL Search': window.location.search,
+          'Has Telegram Object': hasTelegramObj.toString()
+        });
+        debugLog.push('Running in test mode - no Telegram data available');
       }
+    } else {
+      debugLog.push('Window object not available (server-side)');
     }
+    
+    setDebugInfo(debugLog);
   }, []);
 
   return (
     <>
       <Head>
-        <title>Telegram Mini App</title>
+        <title>Telegram Mini App - Debug Version</title>
         <meta name="description" content="Telegram Mini App with initData" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif' }}>
         <main>
-          <h1>Telegram Mini App</h1>
+          <h1>Telegram Mini App - Debug Version</h1>
           
+          <div style={{ marginTop: '20px', backgroundColor: '#fff3cd', padding: '10px', borderRadius: '4px' }}>
+            <h3>Environment Info:</h3>
+            <p><strong>In Telegram?</strong> {isTelegramEnv ? 'Yes' : 'No'}</p>
+          </div>
+
           <div style={{ marginTop: '20px' }}>
             <h2>Raw Init Data:</h2>
             {rawData ? (
@@ -81,7 +116,7 @@ export default function Home() {
                 {rawData}
               </pre>
             ) : (
-              <p>No raw initData found in URL</p>
+              <p>No raw initData found in URL or Telegram object</p>
             )}
           </div>
 
@@ -92,7 +127,7 @@ export default function Home() {
                 {initData}
               </pre>
             ) : (
-              <p>No initData received from URL</p>
+              <p>No initData received from URL or Telegram object</p>
             )}
           </div>
 
@@ -103,6 +138,15 @@ export default function Home() {
                 <li key={key}>
                   <strong>{key}:</strong> {JSON.stringify(value)}
                 </li>
+              ))}
+            </ul>
+          </div>
+
+          <div style={{ marginTop: '20px' }}>
+            <h2>Debug Information:</h2>
+            <ul style={{ textAlign: 'left', paddingLeft: '20px' }}>
+              {debugInfo.map((info, index) => (
+                <li key={index}>{info}</li>
               ))}
             </ul>
           </div>
