@@ -164,7 +164,7 @@ export default function Profile() {
           paddingRight: `var(--safe-area-right)`,
         }}
       >
-        <div className="max-w-lg mx-auto px-5 pt-8 pb-8">
+        <div className="max-w-lg mx-auto pt-8 pb-8" style={{ paddingLeft: '12px', paddingRight: '12px' }}>
           {/* Back Button */}
           <button
             onClick={() => router.push("/")}

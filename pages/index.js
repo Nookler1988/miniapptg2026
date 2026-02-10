@@ -52,8 +52,8 @@ export default function Home() {
         <title>Telegram Mini App</title>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
       </Head>
-      <div className="min-h-screen bg-white" style={{ paddingTop: '60px' }}>
-        <div className="max-w-lg mx-auto px-5 pb-5">
+      <div className="min-h-screen bg-white" style={{ paddingTop: '60px', paddingLeft: '12px', paddingRight: '12px' }}>
+        <div className="max-w-lg mx-auto pb-5">
           
           {/* Profile - Top Right (Clickable) */}
           <div className="flex justify-end items-center mb-8">
