@@ -1,9 +1,19 @@
 import Head from "next/head";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
+import { supabase } from "../lib/supabase";
 
 export default function Profile() {
   const [parsedData, setParsedData] = useState({});
+  const [formData, setFormData] = useState({
+    firstName: '',
+    lastName: '',
+    profession: '',
+    hobbies: '',
+    interests: '',
+    about: ''
+  });
+  const [isSaved, setIsSaved] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -32,6 +42,15 @@ export default function Profile() {
             }
             
             setParsedData(parsed);
+            
+            // Pre-fill first and last name from Telegram
+            if (parsed.user) {
+              setFormData(prev => ({
+                ...prev,
+                firstName: parsed.user.first_name || '',
+                lastName: parsed.user.last_name || ''
+              }));
+            }
           } catch (err) {
             console.error('Error parsing initData:', err);
           }
@@ -44,6 +63,73 @@ export default function Profile() {
     const first = firstName?.charAt(0) || '';
     const last = lastName?.charAt(0) || '';
     return (first + last).toUpperCase() || '?';
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+    setIsSaved(false);
+  };
+
+  const handleSave = async () => {
+    try {
+      const userId = parsedData.user?.id;
+      
+      if (!userId) {
+        console.error('No user ID found');
+        return;
+      }
+
+      const { error } = await supabase
+        .from('profiles')
+        .upsert({
+          telegram_id: userId,
+          first_name: formData.firstName,
+          last_name: formData.lastName,
+          profession: formData.profession,
+          hobbies: formData.hobbies,
+          interests: formData.interests,
+          about: formData.about,
+          updated_at: new Date().toISOString()
+        }, {
+          onConflict: 'telegram_id'
+        });
+
+      if (error) {
+        console.error('Error saving to Supabase:', error);
+        alert('Ошибка сохранения: ' + error.message);
+      } else {
+        console.log('Saved to Supabase successfully');
+        setIsSaved(true);
+        setTimeout(() => {
+          setIsSaved(false);
+        }, 2000);
+      }
+    } catch (err) {
+      console.error('Error:', err);
+      alert('Ошибка: ' + err.message);
+    }
+  };
+
+  const inputStyle = {
+    width: '100%',
+    padding: '12px',
+    border: '1px solid #ddd',
+    borderRadius: '8px',
+    fontSize: '16px',
+    fontFamily: 'inherit',
+    boxSizing: 'border-box',
+    marginBottom: '4px'
+  };
+
+  const labelStyle = {
+    fontSize: '14px',
+    color: '#666',
+    marginBottom: '6px',
+    display: 'block'
   };
 
   return (
@@ -96,149 +182,158 @@ export default function Profile() {
           Профиль
         </h1>
 
-        {/* User Data */}
-        {parsedData.user ? (
+        {/* Avatar */}
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: '16px',
+          marginBottom: '30px'
+        }}>
           <div style={{
-            border: '1px solid #ddd',
-            borderRadius: '12px',
-            padding: '24px',
-            backgroundColor: '#fafafa'
+            width: '80px',
+            height: '80px',
+            borderRadius: '50%',
+            backgroundColor: '#1a1a1a',
+            color: '#ffffff',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontSize: '32px',
+            fontWeight: 'bold'
           }}>
-            {/* Avatar and Name */}
-            <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '16px',
-              marginBottom: '24px'
-            }}>
-              <div style={{
-                width: '64px',
-                height: '64px',
-                borderRadius: '50%',
-                backgroundColor: '#1a1a1a',
-                color: '#ffffff',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                fontSize: '24px',
-                fontWeight: 'bold'
-              }}>
-                {getInitials(parsedData.user.first_name, parsedData.user.last_name)}
-              </div>
-              <div>
-                <div style={{
-                  fontSize: '20px',
-                  fontWeight: 'bold',
-                  color: '#1a1a1a',
-                  marginBottom: '4px'
-                }}>
-                  {parsedData.user.first_name} {parsedData.user.last_name || ''}
-                </div>
-                {parsedData.user.username && (
-                  <div style={{
-                    fontSize: '14px',
-                    color: '#666'
-                  }}>
-                    @{parsedData.user.username}
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {/* User Details */}
-            <div style={{
-              borderTop: '1px solid #ddd',
-              paddingTop: '20px'
-            }}>
-              <div style={{ marginBottom: '16px' }}>
-                <div style={{
-                  fontSize: '12px',
-                  color: '#666',
-                  marginBottom: '4px'
-                }}>
-                  ID
-                </div>
-                <div style={{
-                  fontSize: '16px',
-                  color: '#1a1a1a',
-                  fontFamily: 'monospace'
-                }}>
-                  {parsedData.user.id}
-                </div>
-              </div>
-
-              {parsedData.user.language_code && (
-                <div style={{ marginBottom: '16px' }}>
-                  <div style={{
-                    fontSize: '12px',
-                    color: '#666',
-                    marginBottom: '4px'
-                  }}>
-                    Язык
-                  </div>
-                  <div style={{
-                    fontSize: '16px',
-                    color: '#1a1a1a'
-                  }}>
-                    {parsedData.user.language_code.toUpperCase()}
-                  </div>
-                </div>
-              )}
-
-              {parsedData.user.is_premium && (
-                <div>
-                  <div style={{
-                    fontSize: '12px',
-                    color: '#666',
-                    marginBottom: '4px'
-                  }}>
-                    Статус
-                  </div>
-                  <div style={{
-                    fontSize: '16px',
-                    color: '#1a1a1a',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '6px'
-                  }}>
-                    <span>⭐</span>
-                    <span>Premium</span>
-                  </div>
-                </div>
-              )}
-            </div>
+            {getInitials(formData.firstName, formData.lastName)}
           </div>
-        ) : (
-          <div style={{
-            border: '1px solid #ddd',
-            borderRadius: '12px',
-            padding: '24px',
-            backgroundColor: '#fafafa',
-            textAlign: 'center'
-          }}>
+          <div>
             <div style={{
-              width: '64px',
-              height: '64px',
-              borderRadius: '50%',
-              backgroundColor: '#ddd',
+              fontSize: '14px',
               color: '#666',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontSize: '24px',
-              fontWeight: 'bold',
-              margin: '0 auto 16px'
+              marginBottom: '4px'
             }}>
-              ?
+              ID: {parsedData.user?.id}
             </div>
-            <div style={{
-              fontSize: '18px',
-              color: '#666'
-            }}>
-              Нет данных пользователя
-            </div>
+            {parsedData.user?.username && (
+              <div style={{
+                fontSize: '14px',
+                color: '#666'
+              }}>
+                @{parsedData.user.username}
+              </div>
+            )}
           </div>
-        )}
+        </div>
+
+        {/* Edit Form */}
+        <div style={{ marginBottom: '20px' }}>
+          <h2 style={{
+            fontSize: '18px',
+            fontWeight: 'bold',
+            marginBottom: '20px',
+            color: '#1a1a1a'
+          }}>
+            Редактировать профиль
+          </h2>
+
+          {/* First Name */}
+          <div style={{ marginBottom: '16px' }}>
+            <label style={labelStyle}>Имя</label>
+            <input
+              type="text"
+              name="firstName"
+              value={formData.firstName}
+              onChange={handleInputChange}
+              placeholder="Введите имя"
+              style={inputStyle}
+            />
+          </div>
+
+          {/* Last Name */}
+          <div style={{ marginBottom: '16px' }}>
+            <label style={labelStyle}>Фамилия</label>
+            <input
+              type="text"
+              name="lastName"
+              value={formData.lastName}
+              onChange={handleInputChange}
+              placeholder="Введите фамилию"
+              style={inputStyle}
+            />
+          </div>
+
+          {/* Profession */}
+          <div style={{ marginBottom: '16px' }}>
+            <label style={labelStyle}>Профессия</label>
+            <input
+              type="text"
+              name="profession"
+              value={formData.profession}
+              onChange={handleInputChange}
+              placeholder="Например: Разработчик, Дизайнер"
+              style={inputStyle}
+            />
+          </div>
+
+          {/* Hobbies */}
+          <div style={{ marginBottom: '16px' }}>
+            <label style={labelStyle}>Хобби</label>
+            <input
+              type="text"
+              name="hobbies"
+              value={formData.hobbies}
+              onChange={handleInputChange}
+              placeholder="Например: Фотография, путешествия"
+              style={inputStyle}
+            />
+          </div>
+
+          {/* Interests */}
+          <div style={{ marginBottom: '16px' }}>
+            <label style={labelStyle}>Интересы</label>
+            <input
+              type="text"
+              name="interests"
+              value={formData.interests}
+              onChange={handleInputChange}
+              placeholder="Например: Технологии, искусство, спорт"
+              style={inputStyle}
+            />
+          </div>
+
+          {/* About */}
+          <div style={{ marginBottom: '24px' }}>
+            <label style={labelStyle}>О себе</label>
+            <textarea
+              name="about"
+              value={formData.about}
+              onChange={handleInputChange}
+              placeholder="Расскажите о себе..."
+              rows={4}
+              style={{
+                ...inputStyle,
+                resize: 'vertical',
+                minHeight: '100px'
+              }}
+            />
+          </div>
+
+          {/* Save Button */}
+          <button
+            onClick={handleSave}
+            style={{
+              width: '100%',
+              padding: '14px',
+              backgroundColor: isSaved ? '#4caf50' : '#1a1a1a',
+              color: '#ffffff',
+              border: 'none',
+              borderRadius: '8px',
+              fontSize: '16px',
+              fontWeight: 'bold',
+              cursor: 'pointer',
+              transition: 'background-color 0.3s'
+            }}
+          >
+            {isSaved ? '✓ Сохранено!' : 'Сохранить'}
+          </button>
+        </div>
       </div>
     </>
   );
