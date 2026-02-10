@@ -207,14 +207,14 @@ export default function Profile() {
 
           {isEditing ? (
             /* Form Mode */
-            <div className="space-y-8">
-              <h2 className="text-lg font-semibold text-gray-800 mb-8">
+            <div>
+              <h2 className="text-lg font-semibold text-gray-800 mb-10">
                 Редактировать профиль
               </h2>
 
               {/* First Name */}
-              <div className="pb-6 border-b border-gray-100">
-                <label className="block text-sm font-medium text-gray-600 mb-3">
+              <div className="mb-10">
+                <label className="block text-sm font-medium text-gray-700 mb-4">
                   Имя
                 </label>
                 <input
@@ -223,13 +223,13 @@ export default function Profile() {
                   value={formData.firstName}
                   onChange={handleInputChange}
                   placeholder="Введите имя"
-                  className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent focus:bg-white transition-all duration-200"
+                  className="w-full px-4 py-3.5 bg-white border border-gray-300 rounded-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
                 />
               </div>
 
               {/* Last Name */}
-              <div className="pb-6 border-b border-gray-100">
-                <label className="block text-sm font-medium text-gray-600 mb-3">
+              <div className="mb-10">
+                <label className="block text-sm font-medium text-gray-700 mb-4">
                   Фамилия
                 </label>
                 <input
@@ -238,13 +238,13 @@ export default function Profile() {
                   value={formData.lastName}
                   onChange={handleInputChange}
                   placeholder="Введите фамилию"
-                  className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent focus:bg-white transition-all duration-200"
+                  className="w-full px-4 py-3.5 bg-white border border-gray-300 rounded-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
                 />
               </div>
 
               {/* Profession */}
-              <div className="pb-6 border-b border-gray-100">
-                <label className="block text-sm font-medium text-gray-600 mb-3">
+              <div className="mb-10">
+                <label className="block text-sm font-medium text-gray-700 mb-4">
                   Профессия
                 </label>
                 <input
@@ -253,20 +253,20 @@ export default function Profile() {
                   value={formData.profession}
                   onChange={handleInputChange}
                   placeholder="Например: Разработчик, Дизайнер"
-                  className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent focus:bg-white transition-all duration-200"
+                  className="w-full px-4 py-3.5 bg-white border border-gray-300 rounded-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
                 />
               </div>
 
               {/* Hobbies */}
-              <div className="pb-6 border-b border-gray-100">
-                <label className="block text-sm font-medium text-gray-600 mb-3">
+              <div className="mb-10">
+                <label className="block text-sm font-medium text-gray-700 mb-4">
                   Хобби <span className="text-gray-400">({formData.hobbies.length}/5)</span>
                 </label>
-                <div className="flex flex-wrap gap-2 mb-3">
+                <div className="flex flex-wrap gap-2 mb-4">
                   {formData.hobbies.map((hobby, index) => (
                     <span
                       key={index}
-                      className="inline-flex items-center gap-1 px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm"
+                      className="inline-flex items-center gap-1 px-3 py-1.5 bg-blue-100 text-blue-800 rounded-full text-sm"
                     >
                       {hobby}
                       <button
@@ -285,21 +285,21 @@ export default function Profile() {
                     onChange={(e) => setHobbyInput(e.target.value)}
                     onKeyDown={handleHobbyKeyDown}
                     placeholder="Введите хобби и нажмите Enter"
-                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent focus:bg-white transition-all duration-200"
+                    className="w-full px-4 py-3.5 bg-white border border-gray-300 rounded-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
                   />
                 )}
               </div>
 
               {/* Interests */}
-              <div className="pb-6 border-b border-gray-100">
-                <label className="block text-sm font-medium text-gray-600 mb-3">
+              <div className="mb-10">
+                <label className="block text-sm font-medium text-gray-700 mb-4">
                   Интересы <span className="text-gray-400">({formData.interests.length}/5)</span>
                 </label>
-                <div className="flex flex-wrap gap-2 mb-2">
+                <div className="flex flex-wrap gap-2 mb-4">
                   {formData.interests.map((interest, index) => (
                     <span
                       key={index}
-                      className="inline-flex items-center gap-1 px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-sm"
+                      className="inline-flex items-center gap-1 px-3 py-1.5 bg-purple-100 text-purple-800 rounded-full text-sm"
                     >
                       {interest}
                       <button
@@ -318,14 +318,14 @@ export default function Profile() {
                     onChange={(e) => setInterestInput(e.target.value)}
                     onKeyDown={handleInterestKeyDown}
                     placeholder="Введите интерес и нажмите Enter"
-                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent focus:bg-white transition-all duration-200"
+                    className="w-full px-4 py-3.5 bg-white border border-gray-300 rounded-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
                   />
                 )}
               </div>
 
               {/* About */}
-              <div className="pb-6">
-                <label className="block text-sm font-medium text-gray-600 mb-3">
+              <div className="mb-10">
+                <label className="block text-sm font-medium text-gray-700 mb-4">
                   О себе
                 </label>
                 <textarea
@@ -334,12 +334,12 @@ export default function Profile() {
                   onChange={handleInputChange}
                   placeholder="Расскажите о себе..."
                   rows={4}
-                  className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent focus:bg-white transition-all duration-200 resize-none"
+                  className="w-full px-4 py-3.5 bg-white border border-gray-300 rounded-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 resize-none"
                 />
               </div>
 
               {/* Save Button */}
-              <div className="pt-4">
+              <div className="mt-12">
                 <button
                   onClick={handleSave}
                   className={`w-full py-4 px-4 rounded-xl font-semibold text-white transition-all duration-300 transform active:scale-95 ${
