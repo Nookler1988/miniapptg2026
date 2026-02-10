@@ -71,6 +71,22 @@ export default function Home() {
               alignItems: 'center',
               gap: '12px'
             }}>
+              {/* Avatar */}
+              <div style={{
+                width: '24px',
+                height: '24px',
+                borderRadius: '50%',
+                backgroundColor: '#1a1a1a',
+                color: '#ffffff',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: '10px',
+                fontWeight: 'bold'
+              }}>
+                {getInitials(parsedData.user.first_name, parsedData.user.last_name)}
+              </div>
+              
               {/* Name */}
               <div style={{
                 fontSize: '16px',
@@ -78,22 +94,6 @@ export default function Home() {
                 color: '#1a1a1a'
               }}>
                 {parsedData.user.first_name} {parsedData.user.last_name || ''}
-              </div>
-              
-              {/* Avatar */}
-              <div style={{
-                width: '48px',
-                height: '48px',
-                borderRadius: '50%',
-                backgroundColor: '#1a1a1a',
-                color: '#ffffff',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                fontSize: '18px',
-                fontWeight: 'bold'
-              }}>
-                {getInitials(parsedData.user.first_name, parsedData.user.last_name)}
               </div>
             </div>
           ) : (
@@ -103,25 +103,25 @@ export default function Home() {
               gap: '12px'
             }}>
               <div style={{
-                fontSize: '16px',
-                fontWeight: 'bold',
-                color: '#666'
-              }}>
-                Guest
-              </div>
-              <div style={{
-                width: '48px',
-                height: '48px',
+                width: '24px',
+                height: '24px',
                 borderRadius: '50%',
                 backgroundColor: '#ddd',
                 color: '#666',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                fontSize: '18px',
+                fontSize: '10px',
                 fontWeight: 'bold'
               }}>
                 ?
+              </div>
+              <div style={{
+                fontSize: '16px',
+                fontWeight: 'bold',
+                color: '#666'
+              }}>
+                Guest
               </div>
             </div>
           )}
