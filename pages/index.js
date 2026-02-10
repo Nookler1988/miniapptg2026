@@ -12,6 +12,7 @@ export default function Home() {
 
   useEffect(() => {
     const debugLog = [];
+    let dataFound = false;
     
     if (typeof window !== 'undefined') {
       debugLog.push(`Location: ${window.location.pathname}`);
@@ -45,6 +46,7 @@ export default function Home() {
         if (tg.initData) {
           debugLog.push('Getting initData from Telegram object');
           processInitData(tg.initData, debugLog, 'Telegram object');
+          dataFound = true;
         } else {
           debugLog.push('No initData in Telegram object');
         }
@@ -53,12 +55,14 @@ export default function Home() {
       const urlParams = new URLSearchParams(window.location.search);
       const initDataFromUrl = urlParams.get('tgWebAppData');
       
-      if (initDataFromUrl && !initData) {
+      if (initDataFromUrl && !dataFound) {
         debugLog.push('Getting initData from URL params');
         processInitData(initDataFromUrl, debugLog, 'URL params');
+        dataFound = true;
       }
       
-      if (!initData && !parsedData.user) {
+      // Development Mode только если данные НЕ найдены
+      if (!dataFound) {
         setParsedData({
           'Status': 'Development Mode',
           'Message': 'Not running in Telegram environment',
