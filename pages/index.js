@@ -1,8 +1,10 @@
 import Head from "next/head";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 
 export default function Home() {
   const [parsedData, setParsedData] = useState({});
+  const router = useRouter();
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -58,7 +60,7 @@ export default function Home() {
         backgroundColor: '#ffffff',
         minHeight: '100vh'
       }}>
-        {/* Profile - Top Right */}
+        {/* Profile - Top Right (Clickable) */}
         <div style={{
           display: 'flex',
           justifyContent: 'flex-end',
@@ -66,11 +68,18 @@ export default function Home() {
           marginBottom: '30px'
         }}>
           {parsedData.user ? (
-            <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '12px'
-            }}>
+            <button 
+              onClick={() => router.push('/profile')}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '12px',
+                background: 'none',
+                border: 'none',
+                cursor: 'pointer',
+                padding: '4px'
+              }}
+            >
               {/* Avatar */}
               <div style={{
                 width: '24px',
@@ -95,13 +104,20 @@ export default function Home() {
               }}>
                 {parsedData.user.first_name} {parsedData.user.last_name || ''}
               </div>
-            </div>
+            </button>
           ) : (
-            <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '12px'
-            }}>
+            <button 
+              onClick={() => router.push('/profile')}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '12px',
+                background: 'none',
+                border: 'none',
+                cursor: 'pointer',
+                padding: '4px'
+              }}
+            >
               <div style={{
                 width: '24px',
                 height: '24px',
@@ -123,7 +139,7 @@ export default function Home() {
               }}>
                 Guest
               </div>
-            </div>
+            </button>
           )}
         </div>
 
