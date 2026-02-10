@@ -179,9 +179,17 @@ export default function Profile() {
 
           {/* Avatar Section */}
           <div className="flex items-center gap-4 mb-8">
-            <div className="w-20 h-20 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 text-white flex items-center justify-center text-2xl font-bold shadow-lg">
-              {getInitials(formData.firstName, formData.lastName)}
-            </div>
+            {parsedData.user?.photo_url ? (
+              <img 
+                src={parsedData.user.photo_url} 
+                alt="Profile" 
+                className="w-20 h-20 rounded-full object-cover shadow-lg"
+              />
+            ) : (
+              <div className="w-20 h-20 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 text-white flex items-center justify-center text-2xl font-bold shadow-lg">
+                {getInitials(formData.firstName, formData.lastName)}
+              </div>
+            )}
             <div>
               <p className="text-lg font-semibold text-gray-900">
                 {formData.firstName} {formData.lastName}

@@ -63,9 +63,17 @@ export default function Home() {
                 className="flex items-center gap-3 p-1 bg-transparent border-none cursor-pointer hover:opacity-80 transition-opacity"
               >
                 {/* Avatar */}
-                <div className="w-6 h-6 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 text-white flex items-center justify-center text-xs font-bold">
-                  {getInitials(parsedData.user.first_name, parsedData.user.last_name)}
-                </div>
+                {parsedData.user.photo_url ? (
+                  <img 
+                    src={parsedData.user.photo_url} 
+                    alt="Profile" 
+                    className="w-6 h-6 rounded-full object-cover"
+                  />
+                ) : (
+                  <div className="w-6 h-6 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 text-white flex items-center justify-center text-xs font-bold">
+                    {getInitials(parsedData.user.first_name, parsedData.user.last_name)}
+                  </div>
+                )}
                 
                 {/* Name */}
                 <span className="text-base font-bold text-gray-900">
