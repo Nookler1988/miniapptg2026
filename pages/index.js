@@ -141,12 +141,12 @@ export default function Home() {
               margin: '0 0 10px 0',
               fontWeight: 'bold',
               letterSpacing: '2px'
-            }}>✓ WHITE DESIGN v2.0</h1>
+            }}>✓ WHITE DESIGN v2.1</h1>
             <p style={{ 
               margin: 0,
               fontSize: '14px',
               color: '#666'
-            }}>Updated: Clean White Theme</p>
+            }}>Fixed: User Data Now Displays!</p>
           </div>
           
           {isLoading && (
