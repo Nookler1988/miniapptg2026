@@ -61,7 +61,6 @@ export default function Home() {
         dataFound = true;
       }
       
-      // Development Mode только если данные НЕ найдены
       if (!dataFound) {
         setParsedData({
           'Status': 'Development Mode',
@@ -111,6 +110,13 @@ export default function Home() {
     }
   };
 
+  // Get user initials for avatar
+  const getInitials = (firstName, lastName) => {
+    const first = firstName?.charAt(0) || '';
+    const last = lastName?.charAt(0) || '';
+    return (first + last).toUpperCase() || '?';
+  };
+
   return (
     <>
       <Head>
@@ -120,7 +126,7 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <div style={{ 
-        padding: '20px', 
+        padding: '100px 20px 20px 20px', 
         fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
         maxWidth: '600px',
         margin: '0 auto',
@@ -129,24 +135,123 @@ export default function Home() {
         minHeight: '100vh'
       }}>
         <main>
+          {/* User Profile Card */}
+          {parsedData.user && (
+            <div style={{
+              textAlign: 'center',
+              marginBottom: '40px',
+              padding: '30px',
+              border: '2px solid #1a1a1a',
+              backgroundColor: '#ffffff'
+            }}>
+              {/* Avatar */}
+              <div style={{
+                width: '120px',
+                height: '120px',
+                borderRadius: '50%',
+                backgroundColor: '#1a1a1a',
+                color: '#ffffff',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: '48px',
+                fontWeight: 'bold',
+                margin: '0 auto 20px auto',
+                border: '4px solid #1a1a1a'
+              }}>
+                {getInitials(parsedData.user.first_name, parsedData.user.last_name)}
+              </div>
+              
+              {/* Name */}
+              <h2 style={{
+                fontSize: '32px',
+                margin: '0 0 10px 0',
+                fontWeight: 'bold',
+                color: '#1a1a1a'
+              }}>
+                {parsedData.user.first_name} {parsedData.user.last_name || ''}
+              </h2>
+              
+              {/* Username */}
+              {parsedData.user.username && (
+                <p style={{
+                  fontSize: '18px',
+                  color: '#666',
+                  margin: '0 0 15px 0'
+                }}>
+                  @{parsedData.user.username}
+                </p>
+              )}
+              
+              {/* User ID */}
+              <p style={{
+                fontSize: '14px',
+                color: '#999',
+                margin: 0,
+                fontFamily: 'monospace'
+              }}>
+                ID: {parsedData.user.id}
+              </p>
+              
+              {/* Language */}
+              {parsedData.user.language_code && (
+                <p style={{
+                  fontSize: '14px',
+                  color: '#999',
+                  margin: '10px 0 0 0'
+                }}>
+                  Language: {parsedData.user.language_code.toUpperCase()}
+                </p>
+              )}
+            </div>
+          )}
+
+          {/* Development Mode Card */}
+          {!parsedData.user && (
+            <div style={{
+              textAlign: 'center',
+              padding: '30px',
+              border: '2px solid #1a1a1a',
+              marginBottom: '40px',
+              backgroundColor: '#fafafa'
+            }}>
+              <div style={{
+                width: '120px',
+                height: '120px',
+                borderRadius: '50%',
+                backgroundColor: '#ddd',
+                color: '#666',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: '48px',
+                margin: '0 auto 20px auto'
+              }}>
+                ?
+              </div>
+              <h2 style={{ margin: '0 0 10px 0' }}>Guest User</h2>
+              <p style={{ color: '#666', margin: 0 }}>Development Mode</p>
+            </div>
+          )}
+
+          {/* Header */}
           <div style={{
             textAlign: 'center',
-            padding: '30px 20px',
-            border: '2px solid #1a1a1a',
+            padding: '20px',
+            border: '1px solid #ddd',
             marginBottom: '30px',
             backgroundColor: '#ffffff'
           }}>
             <h1 style={{ 
-              fontSize: '28px', 
-              margin: '0 0 10px 0',
-              fontWeight: 'bold',
-              letterSpacing: '2px'
-            }}>✓ WHITE DESIGN v2.1</h1>
+              fontSize: '24px', 
+              margin: '0 0 5px 0',
+              fontWeight: 'bold'
+            }}>✓ WHITE DESIGN v3.0</h1>
             <p style={{ 
               margin: 0,
               fontSize: '14px',
               color: '#666'
-            }}>Fixed: User Data Now Displays!</p>
+            }}>Profile View with Avatar</p>
           </div>
           
           {isLoading && (
@@ -172,7 +277,6 @@ export default function Home() {
           )}
           
           <div style={{ 
-            marginTop: '20px', 
             border: '1px solid #ddd',
             padding: '20px', 
             marginBottom: '20px'
@@ -186,25 +290,6 @@ export default function Home() {
               </>
             )}
           </div>
-
-          {parsedData.user && (
-            <div style={{ 
-              marginTop: '20px', 
-              border: '1px solid #ddd',
-              padding: '20px', 
-              marginBottom: '20px'
-            }}>
-              <h3 style={{ marginTop: 0, borderBottom: '1px solid #ddd', paddingBottom: '10px' }}>User Info</h3>
-              <p style={{ margin: '10px 0' }}><strong>ID:</strong> {parsedData.user.id}</p>
-              <p style={{ margin: '10px 0' }}><strong>Name:</strong> {parsedData.user.first_name} {parsedData.user.last_name || ''}</p>
-              {parsedData.user.username && (
-                <p style={{ margin: '10px 0' }}><strong>Username:</strong> @{parsedData.user.username}</p>
-              )}
-              {parsedData.user.language_code && (
-                <p style={{ margin: '10px 0' }}><strong>Language:</strong> {parsedData.user.language_code}</p>
-              )}
-            </div>
-          )}
 
           <div style={{ marginTop: '20px', marginBottom: '20px' }}>
             <h3 style={{ borderBottom: '1px solid #ddd', paddingBottom: '10px' }}>Raw Init Data</h3>
