@@ -98,225 +98,154 @@ export default function Profile() {
     }
   };
 
-  const inputStyle = {
-    width: '100%',
-    padding: '12px',
-    border: '1px solid #ddd',
-    borderRadius: '8px',
-    fontSize: '16px',
-    fontFamily: 'inherit',
-    boxSizing: 'border-box',
-    marginBottom: '4px'
-  };
-
-  const labelStyle = {
-    fontSize: '14px',
-    color: '#666',
-    marginBottom: '6px',
-    display: 'block'
-  };
-
   return (
     <>
       <Head>
         <title>Профиль - Telegram Mini App</title>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
       </Head>
-      <div style={{ 
-        padding: '20px', 
-        fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
-        maxWidth: '600px',
-        margin: '0 auto',
-        backgroundColor: '#ffffff',
-        minHeight: '100vh'
-      }}>
-        {/* Back Button - Top Left */}
-        <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          marginBottom: '30px'
-        }}>
+      <div className="min-h-screen bg-white">
+        <div className="max-w-lg mx-auto px-5 py-5">
+          
+          {/* Back Button */}
           <button 
             onClick={() => router.push('/')}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '8px',
-              padding: '8px 16px',
-              border: '1px solid #ddd',
-              borderRadius: '8px',
-              backgroundColor: '#ffffff',
-              cursor: 'pointer',
-              fontSize: '14px',
-              color: '#1a1a1a'
-            }}
+            className="inline-flex items-center gap-2 px-4 py-2 mb-8 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 hover:border-gray-400 transition-colors duration-200"
           >
             <span>←</span>
             <span>Назад</span>
           </button>
-        </div>
 
-        {/* Profile Title */}
-        <h1 style={{
-          fontSize: '24px',
-          fontWeight: 'bold',
-          marginBottom: '30px',
-          color: '#1a1a1a'
-        }}>
-          Профиль
-        </h1>
+          {/* Header */}
+          <h1 className="text-2xl font-bold text-gray-900 mb-6">
+            Профиль
+          </h1>
 
-        {/* Avatar */}
-        <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: '16px',
-          marginBottom: '30px'
-        }}>
-          <div style={{
-            width: '80px',
-            height: '80px',
-            borderRadius: '50%',
-            backgroundColor: '#1a1a1a',
-            color: '#ffffff',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            fontSize: '32px',
-            fontWeight: 'bold'
-          }}>
-            {getInitials(formData.firstName, formData.lastName)}
-          </div>
-          <div>
-            <div style={{
-              fontSize: '14px',
-              color: '#666',
-              marginBottom: '4px'
-            }}>
-              ID: {parsedData.user?.id}
+          {/* Avatar Section */}
+          <div className="flex items-center gap-4 mb-8">
+            <div className="w-20 h-20 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 text-white flex items-center justify-center text-2xl font-bold shadow-lg">
+              {getInitials(formData.firstName, formData.lastName)}
             </div>
-            {parsedData.user?.username && (
-              <div style={{
-                fontSize: '14px',
-                color: '#666'
-              }}>
-                @{parsedData.user.username}
-              </div>
-            )}
-          </div>
-        </div>
-
-        {/* Edit Form */}
-        <div style={{ marginBottom: '20px' }}>
-          <h2 style={{
-            fontSize: '18px',
-            fontWeight: 'bold',
-            marginBottom: '20px',
-            color: '#1a1a1a'
-          }}>
-            Редактировать профиль
-          </h2>
-
-          {/* First Name */}
-          <div style={{ marginBottom: '16px' }}>
-            <label style={labelStyle}>Имя</label>
-            <input
-              type="text"
-              name="firstName"
-              value={formData.firstName}
-              onChange={handleInputChange}
-              placeholder="Введите имя"
-              style={inputStyle}
-            />
+            <div>
+              <p className="text-sm text-gray-500">
+                ID: {parsedData.user?.id}
+              </p>
+              {parsedData.user?.username && (
+                <p className="text-sm text-gray-500">
+                  @{parsedData.user.username}
+                </p>
+              )}
+            </div>
           </div>
 
-          {/* Last Name */}
-          <div style={{ marginBottom: '16px' }}>
-            <label style={labelStyle}>Фамилия</label>
-            <input
-              type="text"
-              name="lastName"
-              value={formData.lastName}
-              onChange={handleInputChange}
-              placeholder="Введите фамилию"
-              style={inputStyle}
-            />
-          </div>
+          {/* Form */}
+          <div className="space-y-5">
+            <h2 className="text-lg font-semibold text-gray-800 mb-6">
+              Редактировать профиль
+            </h2>
 
-          {/* Profession */}
-          <div style={{ marginBottom: '16px' }}>
-            <label style={labelStyle}>Профессия</label>
-            <input
-              type="text"
-              name="profession"
-              value={formData.profession}
-              onChange={handleInputChange}
-              placeholder="Например: Разработчик, Дизайнер"
-              style={inputStyle}
-            />
-          </div>
+            {/* First Name */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Имя
+              </label>
+              <input
+                type="text"
+                name="firstName"
+                value={formData.firstName}
+                onChange={handleInputChange}
+                placeholder="Введите имя"
+                className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent focus:bg-white transition-all duration-200"
+              />
+            </div>
 
-          {/* Hobbies */}
-          <div style={{ marginBottom: '16px' }}>
-            <label style={labelStyle}>Хобби</label>
-            <input
-              type="text"
-              name="hobbies"
-              value={formData.hobbies}
-              onChange={handleInputChange}
-              placeholder="Например: Фотография, путешествия"
-              style={inputStyle}
-            />
-          </div>
+            {/* Last Name */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Фамилия
+              </label>
+              <input
+                type="text"
+                name="lastName"
+                value={formData.lastName}
+                onChange={handleInputChange}
+                placeholder="Введите фамилию"
+                className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent focus:bg-white transition-all duration-200"
+              />
+            </div>
 
-          {/* Interests */}
-          <div style={{ marginBottom: '16px' }}>
-            <label style={labelStyle}>Интересы</label>
-            <input
-              type="text"
-              name="interests"
-              value={formData.interests}
-              onChange={handleInputChange}
-              placeholder="Например: Технологии, искусство, спорт"
-              style={inputStyle}
-            />
-          </div>
+            {/* Profession */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Профессия
+              </label>
+              <input
+                type="text"
+                name="profession"
+                value={formData.profession}
+                onChange={handleInputChange}
+                placeholder="Например: Разработчик, Дизайнер"
+                className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent focus:bg-white transition-all duration-200"
+              />
+            </div>
 
-          {/* About */}
-          <div style={{ marginBottom: '24px' }}>
-            <label style={labelStyle}>О себе</label>
-            <textarea
-              name="about"
-              value={formData.about}
-              onChange={handleInputChange}
-              placeholder="Расскажите о себе..."
-              rows={4}
-              style={{
-                ...inputStyle,
-                resize: 'vertical',
-                minHeight: '100px'
-              }}
-            />
-          </div>
+            {/* Hobbies */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Хобби
+              </label>
+              <input
+                type="text"
+                name="hobbies"
+                value={formData.hobbies}
+                onChange={handleInputChange}
+                placeholder="Например: Фотография, путешествия"
+                className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent focus:bg-white transition-all duration-200"
+              />
+            </div>
 
-          {/* Save Button */}
-          <button
-            onClick={handleSave}
-            style={{
-              width: '100%',
-              padding: '14px',
-              backgroundColor: isSaved ? '#4caf50' : '#1a1a1a',
-              color: '#ffffff',
-              border: 'none',
-              borderRadius: '8px',
-              fontSize: '16px',
-              fontWeight: 'bold',
-              cursor: 'pointer',
-              transition: 'background-color 0.3s'
-            }}
-          >
-            {isSaved ? '✓ Сохранено!' : 'Сохранить'}
-          </button>
+            {/* Interests */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Интересы
+              </label>
+              <input
+                type="text"
+                name="interests"
+                value={formData.interests}
+                onChange={handleInputChange}
+                placeholder="Например: Технологии, искусство, спорт"
+                className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent focus:bg-white transition-all duration-200"
+              />
+            </div>
+
+            {/* About */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                О себе
+              </label>
+              <textarea
+                name="about"
+                value={formData.about}
+                onChange={handleInputChange}
+                placeholder="Расскажите о себе..."
+                rows={4}
+                className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent focus:bg-white transition-all duration-200 resize-none"
+              />
+            </div>
+
+            {/* Save Button */}
+            <button
+              onClick={handleSave}
+              className={`w-full py-3.5 px-4 rounded-xl font-semibold text-white transition-all duration-300 transform active:scale-95 ${
+                isSaved 
+                  ? 'bg-green-500 hover:bg-green-600' 
+                  : 'bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 shadow-lg hover:shadow-xl'
+              }`}
+            >
+              {isSaved ? '✓ Сохранено!' : 'Сохранить'}
+            </button>
+          </div>
         </div>
       </div>
     </>

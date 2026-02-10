@@ -52,100 +52,45 @@ export default function Home() {
         <title>Telegram Mini App</title>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
       </Head>
-      <div style={{ 
-        padding: '20px', 
-        fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
-        maxWidth: '600px',
-        margin: '0 auto',
-        backgroundColor: '#ffffff',
-        minHeight: '100vh'
-      }}>
-        {/* Profile - Top Right (Clickable) */}
-        <div style={{
-          display: 'flex',
-          justifyContent: 'flex-end',
-          alignItems: 'center',
-          marginBottom: '30px'
-        }}>
-          {parsedData.user ? (
-            <button 
-              onClick={() => router.push('/profile')}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '12px',
-                background: 'none',
-                border: 'none',
-                cursor: 'pointer',
-                padding: '4px'
-              }}
-            >
-              {/* Avatar */}
-              <div style={{
-                width: '24px',
-                height: '24px',
-                borderRadius: '50%',
-                backgroundColor: '#1a1a1a',
-                color: '#ffffff',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                fontSize: '10px',
-                fontWeight: 'bold'
-              }}>
-                {getInitials(parsedData.user.first_name, parsedData.user.last_name)}
-              </div>
-              
-              {/* Name */}
-              <div style={{
-                fontSize: '16px',
-                fontWeight: 'bold',
-                color: '#1a1a1a'
-              }}>
-                {parsedData.user.first_name} {parsedData.user.last_name || ''}
-              </div>
-            </button>
-          ) : (
-            <button 
-              onClick={() => router.push('/profile')}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '12px',
-                background: 'none',
-                border: 'none',
-                cursor: 'pointer',
-                padding: '4px'
-              }}
-            >
-              <div style={{
-                width: '24px',
-                height: '24px',
-                borderRadius: '50%',
-                backgroundColor: '#ddd',
-                color: '#666',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                fontSize: '10px',
-                fontWeight: 'bold'
-              }}>
-                ?
-              </div>
-              <div style={{
-                fontSize: '16px',
-                fontWeight: 'bold',
-                color: '#666'
-              }}>
-                Guest
-              </div>
-            </button>
-          )}
-        </div>
+      <div className="min-h-screen bg-white">
+        <div className="max-w-lg mx-auto px-5 py-5">
+          
+          {/* Profile - Top Right (Clickable) */}
+          <div className="flex justify-end items-center mb-8">
+            {parsedData.user ? (
+              <button 
+                onClick={() => router.push('/profile')}
+                className="flex items-center gap-3 p-1 bg-transparent border-none cursor-pointer hover:opacity-80 transition-opacity"
+              >
+                {/* Avatar */}
+                <div className="w-6 h-6 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 text-white flex items-center justify-center text-xs font-bold">
+                  {getInitials(parsedData.user.first_name, parsedData.user.last_name)}
+                </div>
+                
+                {/* Name */}
+                <span className="text-base font-bold text-gray-900">
+                  {parsedData.user.first_name} {parsedData.user.last_name || ''}
+                </span>
+              </button>
+            ) : (
+              <button 
+                onClick={() => router.push('/profile')}
+                className="flex items-center gap-3 p-1 bg-transparent border-none cursor-pointer hover:opacity-80 transition-opacity"
+              >
+                <div className="w-6 h-6 rounded-full bg-gray-200 text-gray-500 flex items-center justify-center text-xs font-bold">
+                  ?
+                </div>
+                <span className="text-base font-bold text-gray-500">
+                  Guest
+                </span>
+              </button>
+            )}
+          </div>
 
-        {/* Main Content Area - Empty for now */}
-        <div style={{ minHeight: '400px' }}>
-          {/* Your app content will go here */}
+          {/* Main Content Area - Empty for now */}
+          <div className="min-h-96">
+            {/* Your app content will go here */}
+          </div>
         </div>
       </div>
     </>
