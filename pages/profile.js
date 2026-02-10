@@ -1,6 +1,7 @@
 import Head from "next/head";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
+import { useSafeArea } from "@/components/SafeAreaProvider";
 
 export default function Profile() {
   const [parsedData, setParsedData] = useState({});
@@ -17,6 +18,7 @@ export default function Profile() {
   const [isSaved, setIsSaved] = useState(false);
   const [isEditing, setIsEditing] = useState(true);
   const router = useRouter();
+  const safeArea = useSafeArea();
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -153,22 +155,28 @@ export default function Profile() {
         <title>Профиль - Telegram Mini App</title>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
       </Head>
-      <div className="min-h-screen bg-white">
+      <div
+        className="min-h-screen bg-white"
+        style={{
+          paddingTop: `var(--safe-area-top)`,
+          paddingBottom: `var(--safe-area-bottom)`,
+          paddingLeft: `var(--safe-area-left)`,
+          paddingRight: `var(--safe-area-right)`,
+        }}
+      >
         <div className="max-w-lg mx-auto px-5 py-5">
-          
           {/* Back Button */}
-          <button 
-            onClick={() => router.push('/')}
+          <button
+            onClick={() => router.push("/")}
             className="inline-flex items-center gap-2 px-4 py-2 mb-8 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 hover:border-gray-400 transition-colors duration-200"
+            style={{ marginTop: `var(--content-safe-area-top)` }}
           >
             <span>←</span>
             <span>Назад</span>
           </button>
 
           {/* Header */}
-          <h1 className="text-2xl font-bold text-gray-900 mb-6">
-            Профиль
-          </h1>
+          <h1 className="text-2xl font-bold text-gray-900 mb-6">Профиль</h1>
 
           {/* Avatar Section */}
           <div className="flex items-center gap-4 mb-8">
