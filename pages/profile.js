@@ -1,7 +1,6 @@
 import Head from "next/head";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { supabase } from "../lib/supabase";
 
 export default function Profile() {
   const [parsedData, setParsedData] = useState({});
@@ -19,6 +18,7 @@ export default function Profile() {
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const tg = window.Telegram?.WebApp;
+      let userId = 'guest';
       
       if (tg) {
         tg.ready();
@@ -42,14 +42,22 @@ export default function Profile() {
             }
             
             setParsedData(parsed);
+            userId = parsed.user?.id || 'guest';
             
-            // Pre-fill first and last name from Telegram
-            if (parsed.user) {
-              setFormData(prev => ({
-                ...prev,
-                firstName: parsed.user.first_name || '',
-                lastName: parsed.user.last_name || ''
-              }));
+            // Load saved data from localStorage
+            const savedData = localStorage.getItem(`profile_${userId}`);
+            if (savedData) {
+              const parsedData = JSON.parse(savedData);
+              setFormData(parsedData);
+            } else {
+              // Pre-fill first and last name from Telegram if no saved data
+              if (parsed.user) {
+                setFormData(prev => ({
+                  ...prev,
+                  firstName: parsed.user.first_name || '',
+                  lastName: parsed.user.last_name || ''
+                }));
+              }
             }
           } catch (err) {
             console.error('Error parsing initData:', err);
@@ -74,43 +82,19 @@ export default function Profile() {
     setIsSaved(false);
   };
 
-  const handleSave = async () => {
+  const handleSave = () => {
     try {
-      const userId = parsedData.user?.id;
+      // Save to localStorage
+      const userId = parsedData.user?.id || 'guest';
+      localStorage.setItem(`profile_${userId}`, JSON.stringify(formData));
+      console.log('Profile saved to localStorage:', formData);
       
-      if (!userId) {
-        console.error('No user ID found');
-        return;
-      }
-
-      const { error } = await supabase
-        .from('profiles')
-        .upsert({
-          telegram_id: userId,
-          first_name: formData.firstName,
-          last_name: formData.lastName,
-          profession: formData.profession,
-          hobbies: formData.hobbies,
-          interests: formData.interests,
-          about: formData.about,
-          updated_at: new Date().toISOString()
-        }, {
-          onConflict: 'telegram_id'
-        });
-
-      if (error) {
-        console.error('Error saving to Supabase:', error);
-        alert('Ошибка сохранения: ' + error.message);
-      } else {
-        console.log('Saved to Supabase successfully');
-        setIsSaved(true);
-        setTimeout(() => {
-          setIsSaved(false);
-        }, 2000);
-      }
+      setIsSaved(true);
+      setTimeout(() => {
+        setIsSaved(false);
+      }, 2000);
     } catch (err) {
-      console.error('Error:', err);
-      alert('Ошибка: ' + err.message);
+      console.error('Error saving:', err);
     }
   };
 
