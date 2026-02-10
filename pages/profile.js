@@ -207,14 +207,14 @@ export default function Profile() {
 
           {isEditing ? (
             /* Form Mode */
-            <div className="space-y-5">
-              <h2 className="text-lg font-semibold text-gray-800 mb-6">
+            <div className="space-y-8">
+              <h2 className="text-lg font-semibold text-gray-800 mb-8">
                 Редактировать профиль
               </h2>
 
               {/* First Name */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+              <div className="pb-6 border-b border-gray-100">
+                <label className="block text-sm font-medium text-gray-600 mb-3">
                   Имя
                 </label>
                 <input
@@ -228,8 +228,8 @@ export default function Profile() {
               </div>
 
               {/* Last Name */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+              <div className="pb-6 border-b border-gray-100">
+                <label className="block text-sm font-medium text-gray-600 mb-3">
                   Фамилия
                 </label>
                 <input
@@ -243,8 +243,8 @@ export default function Profile() {
               </div>
 
               {/* Profession */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+              <div className="pb-6 border-b border-gray-100">
+                <label className="block text-sm font-medium text-gray-600 mb-3">
                   Профессия
                 </label>
                 <input
@@ -258,11 +258,11 @@ export default function Profile() {
               </div>
 
               {/* Hobbies */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+              <div className="pb-6 border-b border-gray-100">
+                <label className="block text-sm font-medium text-gray-600 mb-3">
                   Хобби <span className="text-gray-400">({formData.hobbies.length}/5)</span>
                 </label>
-                <div className="flex flex-wrap gap-2 mb-2">
+                <div className="flex flex-wrap gap-2 mb-3">
                   {formData.hobbies.map((hobby, index) => (
                     <span
                       key={index}
@@ -291,8 +291,8 @@ export default function Profile() {
               </div>
 
               {/* Interests */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+              <div className="pb-6 border-b border-gray-100">
+                <label className="block text-sm font-medium text-gray-600 mb-3">
                   Интересы <span className="text-gray-400">({formData.interests.length}/5)</span>
                 </label>
                 <div className="flex flex-wrap gap-2 mb-2">
@@ -324,8 +324,8 @@ export default function Profile() {
               </div>
 
               {/* About */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+              <div className="pb-6">
+                <label className="block text-sm font-medium text-gray-600 mb-3">
                   О себе
                 </label>
                 <textarea
@@ -339,16 +339,18 @@ export default function Profile() {
               </div>
 
               {/* Save Button */}
-              <button
-                onClick={handleSave}
-                className={`w-full py-3.5 px-4 rounded-xl font-semibold text-white transition-all duration-300 transform active:scale-95 ${
-                  isSaved 
-                    ? 'bg-green-500 hover:bg-green-600' 
-                    : 'bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 shadow-lg hover:shadow-xl'
-                }`}
-              >
-                {isSaved ? '✓ Сохранено!' : 'Сохранить'}
-              </button>
+              <div className="pt-4">
+                <button
+                  onClick={handleSave}
+                  className={`w-full py-4 px-4 rounded-xl font-semibold text-white transition-all duration-300 transform active:scale-95 ${
+                    isSaved 
+                      ? 'bg-green-500 hover:bg-green-600' 
+                      : 'bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 shadow-lg hover:shadow-xl'
+                  }`}
+                >
+                  {isSaved ? '✓ Сохранено!' : 'Сохранить'}
+                </button>
+              </div>
             </div>
           ) : (
             /* View Mode */
