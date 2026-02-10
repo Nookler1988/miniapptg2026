@@ -38,7 +38,7 @@ export default function SafeAreaProvider({ children }) {
 
       document.documentElement.style.setProperty(
         "--safe-area-top",
-        `${Math.max(newSafeArea.top, 44)}px`
+        `${Math.max(newSafeArea.top, 60)}px`
       );
       document.documentElement.style.setProperty(
         "--safe-area-right",

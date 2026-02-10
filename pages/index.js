@@ -53,7 +53,7 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
       </Head>
       <div className="min-h-screen bg-white">
-        <div className="max-w-lg mx-auto px-5 py-5">
+        <div className="max-w-lg mx-auto px-5 pt-20 pb-5">
           
           {/* Profile - Top Right (Clickable) */}
           <div className="flex justify-end items-center mb-8">

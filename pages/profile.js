@@ -164,12 +164,11 @@ export default function Profile() {
           paddingRight: `var(--safe-area-right)`,
         }}
       >
-        <div className="max-w-lg mx-auto px-5 py-5">
+        <div className="max-w-lg mx-auto px-5 pt-8 pb-8">
           {/* Back Button */}
           <button
             onClick={() => router.push("/")}
             className="inline-flex items-center gap-2 px-4 py-2 mb-8 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 hover:border-gray-400 transition-colors duration-200"
-            style={{ marginTop: `var(--content-safe-area-top)` }}
           >
             <span>←</span>
             <span>Назад</span>
