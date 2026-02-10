@@ -110,7 +110,6 @@ export default function Home() {
     }
   };
 
-  // Get user initials for avatar
   const getInitials = (firstName, lastName) => {
     const first = firstName?.charAt(0) || '';
     const last = lastName?.charAt(0) || '';
@@ -126,7 +125,7 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <div style={{ 
-        padding: '100px 20px 20px 20px', 
+        padding: '20px', 
         fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
         maxWidth: '600px',
         margin: '0 auto',
@@ -135,104 +134,97 @@ export default function Home() {
         minHeight: '100vh'
       }}>
         <main>
-          {/* User Profile Card */}
-          {parsedData.user && (
-            <div style={{
-              textAlign: 'center',
-              marginBottom: '40px',
-              padding: '30px',
-              border: '2px solid #1a1a1a',
-              backgroundColor: '#ffffff'
-            }}>
-              {/* Avatar */}
+          {/* Top Profile Bar */}
+          <div style={{
+            display: 'flex',
+            justifyContent: 'flex-end',
+            alignItems: 'center',
+            marginBottom: '30px',
+            padding: '10px 0'
+          }}>
+            {parsedData.user ? (
               <div style={{
-                width: '120px',
-                height: '120px',
-                borderRadius: '50%',
-                backgroundColor: '#1a1a1a',
-                color: '#ffffff',
                 display: 'flex',
                 alignItems: 'center',
-                justifyContent: 'center',
-                fontSize: '48px',
-                fontWeight: 'bold',
-                margin: '0 auto 20px auto',
-                border: '4px solid #1a1a1a'
+                gap: '12px',
+                padding: '8px 16px',
+                border: '1px solid #ddd',
+                borderRadius: '50px',
+                backgroundColor: '#fafafa'
               }}>
-                {getInitials(parsedData.user.first_name, parsedData.user.last_name)}
+                {/* Avatar */}
+                <div style={{
+                  width: '40px',
+                  height: '40px',
+                  borderRadius: '50%',
+                  backgroundColor: '#1a1a1a',
+                  color: '#ffffff',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '16px',
+                  fontWeight: 'bold',
+                  flexShrink: 0
+                }}>
+                  {getInitials(parsedData.user.first_name, parsedData.user.last_name)}
+                </div>
+                
+                {/* Name */}
+                <div style={{ textAlign: 'left' }}>
+                  <div style={{
+                    fontSize: '16px',
+                    fontWeight: 'bold',
+                    color: '#1a1a1a',
+                    lineHeight: '1.2'
+                  }}>
+                    {parsedData.user.first_name} {parsedData.user.last_name || ''}
+                  </div>
+                  {parsedData.user.username && (
+                    <div style={{
+                      fontSize: '13px',
+                      color: '#666',
+                      lineHeight: '1.2'
+                    }}>
+                      @{parsedData.user.username}
+                    </div>
+                  )}
+                </div>
               </div>
-              
-              {/* Name */}
-              <h2 style={{
-                fontSize: '32px',
-                margin: '0 0 10px 0',
-                fontWeight: 'bold',
-                color: '#1a1a1a'
+            ) : (
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '12px',
+                padding: '8px 16px',
+                border: '1px solid #ddd',
+                borderRadius: '50px',
+                backgroundColor: '#fafafa'
               }}>
-                {parsedData.user.first_name} {parsedData.user.last_name || ''}
-              </h2>
-              
-              {/* Username */}
-              {parsedData.user.username && (
-                <p style={{
-                  fontSize: '18px',
+                <div style={{
+                  width: '40px',
+                  height: '40px',
+                  borderRadius: '50%',
+                  backgroundColor: '#ddd',
                   color: '#666',
-                  margin: '0 0 15px 0'
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '16px',
+                  fontWeight: 'bold',
+                  flexShrink: 0
                 }}>
-                  @{parsedData.user.username}
-                </p>
-              )}
-              
-              {/* User ID */}
-              <p style={{
-                fontSize: '14px',
-                color: '#999',
-                margin: 0,
-                fontFamily: 'monospace'
-              }}>
-                ID: {parsedData.user.id}
-              </p>
-              
-              {/* Language */}
-              {parsedData.user.language_code && (
-                <p style={{
-                  fontSize: '14px',
-                  color: '#999',
-                  margin: '10px 0 0 0'
+                  ?
+                </div>
+                <div style={{
+                  fontSize: '16px',
+                  fontWeight: 'bold',
+                  color: '#666'
                 }}>
-                  Language: {parsedData.user.language_code.toUpperCase()}
-                </p>
-              )}
-            </div>
-          )}
-
-          {/* Development Mode Card */}
-          {!parsedData.user && (
-            <div style={{
-              textAlign: 'center',
-              padding: '30px',
-              border: '2px solid #1a1a1a',
-              marginBottom: '40px',
-              backgroundColor: '#fafafa'
-            }}>
-              <div style={{
-                width: '120px',
-                height: '120px',
-                borderRadius: '50%',
-                backgroundColor: '#ddd',
-                color: '#666',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                fontSize: '48px',
-                margin: '0 auto 20px auto'
-              }}>
-                ?
+                  Guest
+                </div>
               </div>
-              <h2 style={{ margin: '0 0 10px 0' }}>Guest User</h2>
-              <p style={{ color: '#666', margin: 0 }}>Development Mode</p>
-            </div>
-          )}
+            )}
+          </div>
 
           {/* Header */}
           <div style={{
@@ -246,12 +238,12 @@ export default function Home() {
               fontSize: '24px', 
               margin: '0 0 5px 0',
               fontWeight: 'bold'
-            }}>✓ WHITE DESIGN v3.0</h1>
+            }}>✓ WHITE DESIGN v3.1</h1>
             <p style={{ 
               margin: 0,
               fontSize: '14px',
               color: '#666'
-            }}>Profile View with Avatar</p>
+            }}>Profile in Top Corner</p>
           </div>
           
           {isLoading && (
